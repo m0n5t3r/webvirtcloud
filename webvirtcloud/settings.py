@@ -87,6 +87,7 @@ QUOTA_DEBUG = True
 ALLOW_EMPTY_PASSWORD = True
 
 SECRET_KEY = ''
+LOCAL_PATH = None
 
 try:
     from local.local_settings import *  # noqa
