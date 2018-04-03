@@ -76,7 +76,7 @@ backlog = 2048
 def get_workers():
     procs = os.sysconf('SC_NPROCESSORS_ONLN')
     if procs > 0:
-        return procs * 2 + 1
+        return min(procs * 2 + 1, 8)
     else:
         return 3
 
