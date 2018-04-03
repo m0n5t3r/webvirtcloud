@@ -86,6 +86,8 @@ LOGS_PER_PAGE = 100
 QUOTA_DEBUG = True
 ALLOW_EMPTY_PASSWORD = True
 
+SECRET_KEY = ''
+
 try:
     from local.local_settings import *  # noqa
 except ImportError:
