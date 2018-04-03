@@ -7,3 +7,5 @@ db.sqlite3
 console/cert.pem
 tags
 dhcpd.*
+wevbirtcloud/local/.secret_key_store
+wevbirtcloud/local/local_settings.py

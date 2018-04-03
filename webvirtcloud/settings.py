@@ -6,43 +6,11 @@ Django settings for webvirtcloud project.
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-SECRET_KEY = '4y(f4rfqc6f2!i8_vfuu)kav6tdv5#sc=n%o451dm+th0&3uci'
-
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['*']
-
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'computes',
-    'console',
-    'networks',
-    'storages',
-    'interfaces',
-    'instances',
-    'secrets',
-    'logs',
-    'accounts',
-    'create',
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.RemoteUserMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
 
 #AUTHENTICATION_BACKENDS = (
 #    'django.contrib.auth.backends.RemoteUserBackend',
@@ -117,3 +85,54 @@ CLONE_INSTANCE_DEFAULT_PREFIX = 'ourea'
 LOGS_PER_PAGE = 100
 QUOTA_DEBUG = True
 ALLOW_EMPTY_PASSWORD = True
+
+try:
+    from local.local_settings import *  # noqa
+except ImportError:
+    logging.warning("No local_settings file found.")
+
+# Ensure that we always have a SECRET_KEY set, even when no local_settings.py
+# file is present.
+# THIS IS A BACKPORT FROM HORIZON https://github.com/openstack/horizon
+if not SECRET_KEY:
+    if not LOCAL_PATH:
+        LOCAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  'local')
+
+        from webvirtcloud.utils import secret_key
+
+        SECRET_KEY = secret_key.generate_or_read_from_file(os.path.join(LOCAL_PATH,
+                                                           '.secret_key_store'))
+
+# installed apps and middleware shouldn't be overwritten
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'computes',
+    'console',
+    'networks',
+    'storages',
+    'interfaces',
+    'instances',
+    'secrets',
+    'logs',
+    'accounts',
+    'create',
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+
